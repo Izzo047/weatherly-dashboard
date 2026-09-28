@@ -1,7 +1,7 @@
 {
   "name": "weather-dashboard",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.2.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -13,6 +13,7 @@
     "@vitejs/plugin-react": "^4.3.4",
     "autoprefixer": "^10.4.20",
     "axios": "latest",
+    "leaflet": "^1.9.4",
     "lucide-react": "latest",
     "postcss": "^8.4.49",
     "react": "^19.1.1",
