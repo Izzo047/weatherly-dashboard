@@ -5,7 +5,7 @@ import {
 } from 'lucide-react'
 import MapRadar from '../features/map/MapRadar'
 import { aqiDetails, buildGardenAdvice, demoWeather, DEFAULT_CITY, pollenLevel, RECENT_CITIES } from '../features/weather/weatherData'
-import { loadWeather } from '../features/weather/weatherApi'
+import { loadWeather, searchCities } from '../features/weather/weatherApi'
 
 function weatherIcon(type, size = 28) {
   if (type === 'rain') return <CloudRain size={size} strokeWidth={1.6} />
@@ -19,6 +19,8 @@ function Stat({ icon, label, value, unit }) {
 
 export default function App() {
   const [cityInput, setCityInput] = useState('')
+  const [citySuggestions, setCitySuggestions] = useState([])
+  const [searchingCities, setSearchingCities] = useState(false)
   const [weather, setWeather] = useState(demoWeather)
   const [selectedCity, setSelectedCity] = useState(DEFAULT_CITY)
   const [loading, setLoading] = useState(false)
@@ -48,6 +50,31 @@ export default function App() {
 
   useEffect(() => { refreshWeather(DEFAULT_CITY) }, [])
   useEffect(() => {
+    const query = cityInput.trim()
+    if (query.length < 2) {
+      setCitySuggestions([])
+      return undefined
+    }
+
+    let active = true
+    const timer = window.setTimeout(async () => {
+      setSearchingCities(true)
+      try {
+        const matches = await searchCities(query)
+        if (active) setCitySuggestions(matches)
+      } catch {
+        if (active) setCitySuggestions([])
+      } finally {
+        if (active) setSearchingCities(false)
+      }
+    }, 250)
+
+    return () => {
+      active = false
+      window.clearTimeout(timer)
+    }
+  }, [cityInput])
+  useEffect(() => {
     const timer = window.setInterval(async () => {
       try { setWeather(await loadWeather(selectedCity)) } catch { setError('The automatic weather update failed. We will try again soon.') }
     }, 10 * 60 * 1000)
@@ -60,18 +87,22 @@ export default function App() {
   const airDetails = liveAqi === null || liveAqi === undefined
     ? { label: 'No reading', description: 'Air quality data is temporarily unavailable', tone: 'unknown' }
     : aqiDetails(liveAqi)
+  const chooseCity = (city) => {
+    setCitySuggestions([])
+    refreshWeather(city)
+  }
 
   return (
     <main className="app-shell">
       <div className="grain" />
       <header className="topbar">
         <div className="brand" aria-label="Weatherly"><span className="brand-mark"><CloudSun size={21} /></span><span>weatherly</span></div>
-        <div className="topbar-actions"><span className="live-status"><span className="status-dot" /> Live weather</span><button className="icon-button" onClick={() => setIsDark((value) => !value)} aria-label="Toggle dark mode" title="Toggle dark mode">{isDark ? <Sun size={18} /> : <Moon size={18} />}</button></div>
+        <div className="topbar-actions"><button className="icon-button" onClick={() => setIsDark((value) => !value)} aria-label="Toggle dark mode" title="Toggle dark mode">{isDark ? <Sun size={18} /> : <Moon size={18} />}</button></div>
       </header>
 
       <section className="hero-row">
         <div><p className="eyebrow">Your daily outlook</p><h1>Make plans with<br /><em>better weather.</em></h1><p className="hero-copy">A clear view of what’s happening outside, wherever you are.</p></div>
-        <form className="search-wrap" onSubmit={(event) => { event.preventDefault(); refreshWeather(cityInput) }}><Search size={19} /><input value={cityInput} onChange={(event) => setCityInput(event.target.value)} placeholder="Search a city..." aria-label="Search for a city" />{cityInput && <button type="button" className="clear-search" onClick={() => setCityInput('')} aria-label="Clear search"><X size={15} /></button>}<button className="search-button" type="submit">Search</button></form>
+        <div className="search-area"><form className="search-wrap" onSubmit={(event) => { event.preventDefault(); refreshWeather(cityInput); setCitySuggestions([]) }}><Search size={19} /><input value={cityInput} onChange={(event) => setCityInput(event.target.value)} placeholder="Search a city..." aria-label="Search for a city" aria-controls="city-suggestions" aria-expanded={citySuggestions.length > 0} />{cityInput && <button type="button" className="clear-search" onClick={() => { setCityInput(''); setCitySuggestions([]) }} aria-label="Clear search"><X size={15} /></button>}<button className="search-button" type="submit">Search</button></form>{(searchingCities || citySuggestions.length > 0) && <div className="city-suggestions" id="city-suggestions" role="listbox" aria-label="Matching cities">{searchingCities && <div className="suggestion-status">Finding cities...</div>}{citySuggestions.map((city) => <button key={city.id} type="button" role="option" onClick={() => chooseCity(city.name)}><span className="suggestion-city">{city.name}</span><span className="suggestion-location">{[city.region, city.country].filter(Boolean).join(', ')}{city.countryCode ? ` · ${city.countryCode}` : ''}</span></button>)}</div>}</div>
       </section>
       {error && <div className="error-message" role="alert">{error}</div>}
 

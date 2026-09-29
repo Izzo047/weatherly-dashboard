@@ -1,6 +1,20 @@
 import axios from 'axios'
 import { dayName, formatLocalTime, pollenLevel, weatherDetails } from './weatherData'
 
+export async function searchCities(query) {
+  if (query.trim().length < 2) return []
+  const { data } = await axios.get('https://geocoding-api.open-meteo.com/v1/search', {
+    params: { name: query.trim(), count: 7, language: 'en', format: 'json' },
+  })
+  return (data.results || []).map((location) => ({
+    id: `${location.latitude}-${location.longitude}`,
+    name: location.name,
+    region: location.admin1,
+    country: location.country,
+    countryCode: location.country_code,
+  }))
+}
+
 export async function loadWeather(city) {
   const { data: locations } = await axios.get('https://geocoding-api.open-meteo.com/v1/search', {
     params: { name: city, count: 1, language: 'en', format: 'json' },
