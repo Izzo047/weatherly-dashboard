@@ -341,10 +341,10 @@ function App() {
     <main className="app-shell">
       <div className="grain" />
       <header className="topbar">
-        <a className="brand" href="/" aria-label="Weatherly home">
+        <div className="brand" aria-label="Weatherly">
           <span className="brand-mark"><CloudSun size={21} /></span>
           <span>weatherly</span>
-        </a>
+        </div>
         <div className="topbar-actions">
           <span className="live-status"><span className="status-dot" /> Live weather</span>
           <button className="icon-button" onClick={() => setIsDark((value) => !value)} aria-label="Toggle dark mode" title="Toggle dark mode">
