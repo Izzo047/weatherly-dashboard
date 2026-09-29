@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import {
   Activity, ArrowDown, ArrowUp, CloudRain, CloudSun, Droplets, Flower2, Gauge, Globe2, Leaf,
   LoaderCircle, MapPin, Moon, Search, Sprout, Sun, Sunrise, Sunset, Wind, X,
