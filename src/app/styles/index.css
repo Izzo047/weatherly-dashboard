@@ -47,7 +47,7 @@ button { cursor: pointer; }
 .suggestion-location, .suggestion-status { color: #849287; font-size: 10px; }
 .suggestion-status { padding: 10px 12px; }
 .error-message { background: #fff0eb; border: 1px solid #f1c8ba; border-radius: 9px; color: #a44c35; font-size: 13px; margin-bottom: 20px; padding: 12px 15px; position: relative; z-index: 1; }
-.dashboard-grid { display: grid; gap: 18px; grid-template-columns: minmax(0, 1.52fr) minmax(280px, .8fr); position: relative; z-index: 1; }
+.dashboard-grid { display: grid; gap: 18px; grid-template-columns: minmax(0, 1.52fr) minmax(280px, .8fr); position: relative; z-index: 0; }
 .panel { background: rgba(255, 255, 255, .74); border: 1px solid rgba(47, 67, 57, .12); border-radius: 18px; box-shadow: 0 12px 40px rgba(53, 74, 57, .055); }
 .current-card { min-height: 350px; padding: 23px 26px 21px; }
 .card-heading { align-items: flex-start; display: flex; justify-content: space-between; }
