@@ -23,7 +23,7 @@ button { cursor: pointer; }
 .icon-button { align-items: center; background: transparent; border: 1px solid rgba(47, 67, 57, .2); border-radius: 50%; color: inherit; display: flex; height: 35px; justify-content: center; transition: .2s; width: 35px; }
 .icon-button:hover { background: #e2eadd; transform: rotate(12deg); }
 .dark .icon-button { border-color: rgba(219, 232, 218, .2); }
-.hero-row { align-items: end; display: flex; justify-content: space-between; padding: 42px 0 30px; position: relative; z-index: 1; }
+.hero-row { align-items: end; display: flex; justify-content: space-between; padding: 42px 0 30px; position: relative; z-index: 5; }
 .eyebrow, .section-label { color: #79907b; font-size: 11px; font-weight: 800; letter-spacing: .14em; margin: 0 0 15px; text-transform: uppercase; }
 .hero-row h1 { font-family: 'Space Grotesk'; font-size: clamp(38px, 4vw, 56px); letter-spacing: -2.5px; line-height: .98; margin: 0; }
 .hero-row h1 em { color: #6e9271; font-style: normal; }
