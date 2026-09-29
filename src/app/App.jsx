@@ -3,9 +3,9 @@ import {
   Activity, ArrowDown, ArrowUp, CloudRain, CloudSun, Droplets, Flower2, Gauge, Globe2, Leaf,
   LoaderCircle, MapPin, Moon, Search, Sprout, Sun, Sunrise, Sunset, Wind, X,
 } from 'lucide-react'
-import MapRadar from './components/MapRadar'
-import { aqiDetails, buildGardenAdvice, demoWeather, DEFAULT_CITY, pollenLevel, RECENT_CITIES } from './data/weather'
-import { loadWeather } from './services/weatherApi'
+import MapRadar from '../features/map/MapRadar'
+import { aqiDetails, buildGardenAdvice, demoWeather, DEFAULT_CITY, pollenLevel, RECENT_CITIES } from '../features/weather/weatherData'
+import { loadWeather } from '../features/weather/weatherApi'
 
 function weatherIcon(type, size = 28) {
   if (type === 'rain') return <CloudRain size={size} strokeWidth={1.6} />

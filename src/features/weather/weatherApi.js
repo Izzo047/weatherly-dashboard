@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { dayName, formatLocalTime, pollenLevel, weatherDetails } from '../data/weather'
+import { dayName, formatLocalTime, pollenLevel, weatherDetails } from './weatherData'
 
 export async function loadWeather(city) {
   const { data: locations } = await axios.get('https://geocoding-api.open-meteo.com/v1/search', {

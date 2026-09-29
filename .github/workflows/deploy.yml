@@ -1,4 +1,4 @@
-name: Deploy Weatherly to GitHub Pages
+name: Deploy Weatherly
 
 on:
   push:
@@ -27,9 +27,9 @@ jobs:
           cache: npm
       - name: Install dependencies
         run: npm ci
-      - name: Build
+      - name: Build application
         run: npm run build
-      - name: Upload build
+      - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: dist

@@ -1,5 +1,7 @@
 # Weatherly
 
+[![Deploy to GitHub Pages](https://github.com/Izzo047/weatherly-dashboard/actions/workflows/deploy.yml/badge.svg)](https://github.com/Izzo047/weatherly-dashboard/actions/workflows/deploy.yml)
+
 A beginner-friendly live weather dashboard powered by Open-Meteo, Axios, Leaflet, and Tailwind CSS.
 
 ## Features
@@ -20,6 +22,23 @@ npm run dev
 
 For a production build, run `npm run build`. The generated `dist` folder can be hosted on any static host.
 
+## Project structure
+
+```text
+src/
+├── app/
+│   ├── App.jsx             # Dashboard composition and page state
+│   └── styles/index.css    # Global layout and responsive styles
+├── features/
+│   ├── map/MapRadar.jsx    # Leaflet map and RainViewer layer
+│   └── weather/
+│       ├── weatherApi.js   # Open-Meteo requests and response mapping
+│       └── weatherData.js  # Weather rules, formatting, and demo data
+└── main.jsx                # React application entry point
+```
+
+The root contains only project configuration, documentation, and deployment metadata. Feature-specific code stays together so each part of the dashboard can be found without searching the entire source tree.
+
 ## Join the community
 
 Weatherly is beginner-friendly by design. You do not need to be a weather expert to help: improvements to the interface, accessibility, documentation, testing, data handling, and small fixes are all valuable.
@@ -30,7 +49,7 @@ Weatherly is beginner-friendly by design. You do not need to be a weather expert
 
 ## GitHub Pages
 
-Push the project to a GitHub repository using the `main` branch. The included GitHub Actions workflow builds and deploys the site automatically. In the repository, open **Settings → Pages** and set the source to **GitHub Actions**.
+Every push to `main` runs the [GitHub Actions deployment workflow](.github/workflows/deploy.yml). It installs dependencies with `npm ci`, builds the Vite app, and publishes `dist` to GitHub Pages. For a new repository, open **Settings → Pages** and set the source to **GitHub Actions**.
 
 The app uses Open-Meteo's public, no-key APIs for geocoding, weather, and air quality. It loads live conditions, a seven-day forecast, particulate readings, and pollen fields where the selected region supports them. RainViewer supplies the radar frame metadata and tiles; Leaflet renders the map with OpenStreetMap tiles. The same live behavior works on GitHub Pages without exposing an API key.
 
