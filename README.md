@@ -20,6 +20,14 @@ npm run dev
 
 For a production build, run `npm run build`. The generated `dist` folder can be hosted on any static host.
 
+## Join the community
+
+Weatherly is beginner-friendly by design. You do not need to be a weather expert to help: improvements to the interface, accessibility, documentation, testing, data handling, and small fixes are all valuable.
+
+- Read [Contributing to Weatherly](CONTRIBUTING.md) for local setup and pull request guidance.
+- Browse open issues for bugs, ideas, and approachable places to start.
+- Read our [Code of Conduct](CODE_OF_CONDUCT.md) and [Security Policy](SECURITY.md) before participating.
+
 ## GitHub Pages
 
 Push the project to a GitHub repository using the `main` branch. The included GitHub Actions workflow builds and deploys the site automatically. In the repository, open **Settings → Pages** and set the source to **GitHub Actions**.
