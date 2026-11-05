@@ -1,0 +1,21 @@
+.radio-map-panel { margin-top: 21px; overflow: hidden; padding: 19px 20px 13px; position: relative; z-index: 1; }
+.radio-map-heading { align-items: end; display: flex; justify-content: space-between; margin-bottom: 14px; }
+.radio-map-heading .eyebrow { margin-bottom: 7px; }
+.radio-map-heading h2 { font-family: 'Space Grotesk'; font-size: 21px; margin: 0; }
+.radio-map-count { align-items: center; color: #748573; display: flex; font-size: 10px; gap: 5px; }
+.radio-map-canvas { background: #dce8d1; border: 1px solid var(--valley-line); height: min(52vw, 430px); min-height: 270px; width: 100%; z-index: 0; }
+.radio-map-note { color: #849183; font-size: 10px; line-height: 1.5; margin: 10px 0 0; }
+.radio-map-popup { display: grid; gap: 6px; min-width: 150px; }
+.radio-map-popup strong { color: #263b2d; font: 600 12px 'Space Grotesk', sans-serif; }
+.radio-map-popup small { color: #72816e; font: 10px Manrope, sans-serif; }
+.radio-map-popup button { background: #356747; border: 0; color: #fffdf6; cursor: pointer; font: 700 10px Manrope, sans-serif; justify-self: start; margin-top: 3px; padding: 7px 9px; }
+.radio-map-popup button:hover { background: #254d34; }
+.radio-map-canvas .leaflet-popup-content-wrapper { border-radius: 5px; }
+.radio-map-canvas .leaflet-popup-content { margin: 11px 13px; }
+.dark .radio-map-panel .leaflet-container { background: #24352e; }
+@media (max-width: 560px) {
+  .radio-map-panel { padding: 16px 12px 12px; }
+  .radio-map-heading { align-items: flex-start; flex-direction: column; gap: 9px; }
+  .radio-map-heading h2 { font-size: 19px; }
+  .radio-map-canvas { height: 330px; min-height: 250px; }
+}
