@@ -1,11 +1,13 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import {
   Activity, ArrowDown, ArrowUp, CloudRain, CloudSun, Droplets, Flower2, Gauge, Globe2, Leaf,
-  LoaderCircle, MapPin, Moon, Search, Sprout, Sun, Sunrise, Sunset, Wind, X,
+  LoaderCircle, MapPin, Moon, Radio, Search, Sprout, Sun, Sunrise, Sunset, Wind, X,
 } from 'lucide-react'
 import MapRadar from '../features/map/MapRadar'
 import { aqiDetails, buildGardenAdvice, demoWeather, DEFAULT_CITY, pollenLevel, RECENT_CITIES } from '../features/weather/weatherData'
 import { loadWeather, searchCities } from '../features/weather/weatherApi'
+import GardenView from '../features/garden/GardenView'
+import WorldRadio from '../features/radio/WorldRadio'
 
 function weatherIcon(type, size = 28) {
   if (type === 'rain') return <CloudRain size={size} strokeWidth={1.6} />
@@ -26,6 +28,7 @@ export default function App() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [isDark, setIsDark] = useState(() => localStorage.getItem('weatherly-theme') === 'dark')
+  const [activeView, setActiveView] = useState('weather')
 
   useEffect(() => {
     document.documentElement.classList.toggle('dark', isDark)
@@ -97,9 +100,15 @@ export default function App() {
       <div className="grain" />
       <header className="topbar">
         <div className="brand" aria-label="Weatherly"><span className="brand-mark"><CloudSun size={21} /></span><span>weatherly</span></div>
+        <nav className="primary-nav" aria-label="Main navigation">
+          <button className={activeView === 'weather' ? 'active' : ''} onClick={() => setActiveView('weather')} aria-current={activeView === 'weather' ? 'page' : undefined}><CloudSun size={16} />Weather</button>
+          <button className={activeView === 'garden' ? 'active' : ''} onClick={() => setActiveView('garden')} aria-current={activeView === 'garden' ? 'page' : undefined}><Sprout size={16} />Garden</button>
+          <button className={activeView === 'radio' ? 'active' : ''} onClick={() => setActiveView('radio')} aria-current={activeView === 'radio' ? 'page' : undefined}><Radio size={16} />World radio</button>
+        </nav>
         <div className="topbar-actions"><button className="icon-button" onClick={() => setIsDark((value) => !value)} aria-label="Toggle dark mode" title="Toggle dark mode">{isDark ? <Sun size={18} /> : <Moon size={18} />}</button></div>
       </header>
 
+      {activeView === 'weather' && <>
       <section className="hero-row">
         <div><p className="eyebrow">Your daily outlook</p><h1>Make plans with<br /><em>better weather.</em></h1><p className="hero-copy">A clear view of what’s happening outside, wherever you are.</p></div>
         <div className="search-area"><form className="search-wrap" onSubmit={(event) => { event.preventDefault(); refreshWeather(cityInput); setCitySuggestions([]) }}><Search size={19} /><input value={cityInput} onChange={(event) => setCityInput(event.target.value)} placeholder="Search a city..." aria-label="Search for a city" aria-controls="city-suggestions" aria-expanded={citySuggestions.length > 0} />{cityInput && <button type="button" className="clear-search" onClick={() => { setCityInput(''); setCitySuggestions([]) }} aria-label="Clear search"><X size={15} /></button>}<button className="search-button" type="submit">Search</button></form>{(searchingCities || citySuggestions.length > 0) && <div className="city-suggestions" id="city-suggestions" role="listbox" aria-label="Matching cities">{searchingCities && <div className="suggestion-status">Finding cities...</div>}{citySuggestions.map((city) => <button key={city.id} type="button" role="option" onClick={() => chooseCity(city.name)}><span className="suggestion-city">{city.name}</span><span className="suggestion-location">{[city.region, city.country].filter(Boolean).join(', ')}{city.countryCode ? ` · ${city.countryCode}` : ''}</span></button>)}</div>}</div>
@@ -129,6 +138,9 @@ export default function App() {
       <MapRadar weather={weather} />
       <section className="forecast-section"><div className="section-header"><div><p className="eyebrow">Looking ahead</p><h2>7-day forecast</h2></div><span className="forecast-note">Live data · auto-refreshes every 10 min</span></div><div className="forecast-grid">{weather.forecast.map((day) => <article className="forecast-day" key={`${day.day}-${day.date}`}><p className="forecast-day-name">{day.day}</p><p className="forecast-date">{day.date}</p><div className="forecast-icon">{weatherIcon(day.icon, 30)}</div><div className="forecast-temp"><strong>{day.high}°</strong><span>{day.low}°</span></div><p className="rain-chance"><CloudRain size={13} /> {day.rain}%</p></article>)}</div></section>
       <footer>Weatherly <span>•</span> simple weather, thoughtfully presented</footer>
+      </>}
+      {activeView === 'garden' && <GardenView weather={weather} />}
+      {activeView === 'radio' && <WorldRadio />}
     </main>
   )
 }
