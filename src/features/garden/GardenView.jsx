@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react'
-import { Check, CloudRain, Droplets, Flower2, Leaf, Sun, Sprout, Wind } from 'lucide-react'
+import { Check, CloudRain, Droplets, Flower2, Leaf, Pickaxe, Sun, Sprout, Wind } from 'lucide-react'
 import { buildGardenAdvice } from '../weather/weatherData'
 
 const gardenTasks = [
@@ -29,9 +29,9 @@ export default function GardenView({ weather }) {
     <section className="garden-page" aria-labelledby="garden-title">
       <header className="feature-intro garden-intro">
         <div>
-          <p className="eyebrow">Valley field notes · {weather.city}</p>
+          <p className="eyebrow">Day 1 · Valley field notes · {weather.city}</p>
           <h1 id="garden-title">A little more <em>green</em> each day.</h1>
-          <p className="hero-copy">A cozy corner for checking the skies and tending your patch.</p>
+          <p className="hero-copy">Check the skies, tend your patch, and make today count.</p>
         </div>
         <div className="garden-weather panel">
           <span className="garden-weather-icon">{forecastIcon(weather.icon)}</span>
@@ -39,13 +39,24 @@ export default function GardenView({ weather }) {
         </div>
       </header>
 
-      <div className="garden-scene" aria-hidden="true">
+      <div className="garden-toolbar" aria-label="Garden tools">
+        <span className="toolbar-label">TOOLBELT</span>
+        <span className="tool-slot active"><Pickaxe size={18} /></span>
+        <span className="tool-slot"><Droplets size={18} /></span>
+        <span className="tool-slot"><Sprout size={18} /></span>
+        <span className="tool-slot"><Flower2 size={18} /></span>
+        <span className="tool-slot"><Leaf size={18} /></span>
+        <span className="toolbar-weather"><Sun size={15} /> {weather.temperature}°</span>
+      </div>
+
+      <div className="garden-scene" aria-label="Pixel-art garden scene">
         <div className="scene-sun" />
         <div className="scene-hill hill-back" />
         <div className="scene-hill hill-front" />
         <div className="scene-crops"><Sprout /><Flower2 /><Sprout /><Leaf /><Sprout /></div>
         <div className="scene-ground" />
         <span className="scene-caption">YOUR PATCH, YOUR PACE</span>
+        <span className="scene-sign">WEATHERLY FARM</span>
       </div>
 
       <div className="garden-dashboard">
