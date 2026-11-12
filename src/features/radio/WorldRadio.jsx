@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Headphones, LoaderCircle, MapPin, Play, Radio, Search, Signal, Volume2 } from 'lucide-react'
+import { ChevronDown, Headphones, LoaderCircle, MapPin, Play, Radio, Search, Signal, Volume2 } from 'lucide-react'
 import { loadRadioCountries, searchRadioStations } from './radioApi'
 import WorldRadioMap from './WorldRadioMap'
 
@@ -8,6 +8,8 @@ export default function WorldRadio() {
   const [countryCode, setCountryCode] = useState('')
   const [query, setQuery] = useState('')
   const [stations, setStations] = useState([])
+  const [page, setPage] = useState(1)
+  const [hasMore, setHasMore] = useState(false)
   const [selectedStation, setSelectedStation] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
@@ -30,8 +32,12 @@ export default function WorldRadio() {
       setLoading(true)
       setError('')
       try {
-        const result = await searchRadioStations({ countryCode, query })
-        if (active) setStations(result)
+        const result = await searchRadioStations({ countryCode, query, page: 1 })
+        if (active) {
+          setStations(result)
+          setPage(1)
+          setHasMore(result.length === 60)
+        }
       } catch {
         if (active) setError('The station directory is unavailable right now. Please try again shortly.')
       } finally {
@@ -44,6 +50,22 @@ export default function WorldRadio() {
       window.clearTimeout(timer)
     }
   }, [countryCode, query])
+
+  const loadMoreStations = async () => {
+    const nextPage = page + 1
+    setLoading(true)
+    setError('')
+    try {
+      const result = await searchRadioStations({ countryCode, query, page: nextPage })
+      setStations((current) => [...current, ...result.filter((station) => !current.some((item) => item.stationuuid === station.stationuuid))])
+      setPage(nextPage)
+      setHasMore(result.length === 60)
+    } catch {
+      setError('More stations could not be loaded. Please try again.')
+    } finally {
+      setLoading(false)
+    }
+  }
 
   useEffect(() => {
     const audio = audioRef.current
@@ -66,17 +88,30 @@ export default function WorldRadio() {
 
       <section className="radio-console panel" aria-label="Browse radio stations">
         <div className="radio-console-heading"><div><span className="live-dot" /> LIVE DIRECTORY</div><span>Public stations · worldwide</span></div>
+        <div className="radio-deck">
+          <div className="deck-screen">
+            <span>FM · WORLDWIDE BROADCAST</span>
+            <strong>{selectedStation?.name || 'TUNE THE WORLD'}</strong>
+            <small>{selectedStation ? `${selectedStation.country || 'Worldwide'} · ${selectedStation.codec || 'LIVE STREAM'}` : '60,000+ public stations ready to explore'}</small>
+          </div>
+          <div className="deck-knobs" aria-label="Radio controls">
+            <span><i />TUNE</span>
+            <span><i />VOLUME</span>
+          </div>
+          <div className="signal-meter" aria-label="Directory signal strength"><span /><span /><span /><span /><span /></div>
+        </div>
         <div className="radio-filters">
           <label className="radio-search"><Search size={18} /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search station names..." aria-label="Search station names" /></label>
           <label className="country-select"><MapPin size={17} /><select value={countryCode} onChange={(event) => setCountryCode(event.target.value)} aria-label="Filter by country"><option value="">Worldwide</option>{countries.map((country) => <option key={country.iso_3166_1} value={country.iso_3166_1}>{country.name} · {country.stationcount.toLocaleString()}</option>)}</select></label>
         </div>
-        <p className="radio-source-note">Browse community-listed public streams from India, Japan, the US, the UK, and beyond. Stream availability depends on each station.</p>
+        <p className="radio-source-note">Browse verified community-listed public streams from every country. Results are loaded in pages so the whole directory stays searchable and responsive.</p>
       </section>
 
-      {selectedStation && <section className="now-playing panel" aria-label="Now playing">
+      {selectedStation && <section className="now-playing radio-now-playing panel" aria-label="Now playing">
         <span className="playing-art"><Volume2 size={23} /></span>
         <div className="playing-details"><small>NOW TUNING IN</small><strong>{selectedStation.name}</strong><span>{selectedStation.country || 'Worldwide'}{selectedStation.codec ? ` · ${selectedStation.codec}` : ''}{selectedStation.bitrate ? ` · ${selectedStation.bitrate} kbps` : ''}</span></div>
         <audio ref={audioRef} controls autoPlay src={selectedStation.url_resolved || selectedStation.url} onError={() => setPlaybackError('This station stream is unavailable. Try another station.')} onPlay={() => setPlaybackError('')} aria-label={`Listen to ${selectedStation.name}`} />
+        <span className="playing-wave" aria-hidden="true"><i /><i /><i /><i /><i /><i /><i /></span>
         {playbackError && <p className="playback-error" role="status">{playbackError}</p>}
       </section>}
 
@@ -96,8 +131,10 @@ export default function WorldRadio() {
             {station.homepage && <a className="station-homepage" href={station.homepage} target="_blank" rel="noreferrer">Station website</a>}
           </article>)}
         </div>
+        {hasMore && !loading && <button className="load-more-stations" onClick={loadMoreStations}><ChevronDown size={16} /> Load more stations</button>}
+        {loading && stations.length > 0 && <div className="radio-loading radio-loading-more"><LoaderCircle className="spin" size={17} /> Finding more stations...</div>}
       </section>
-      <footer>Station listings from Radio Browser <span>•</span> streams are provided by their broadcasters</footer>
+      <footer>Verified listings from Radio Browser <span>•</span> streams are provided by their broadcasters</footer>
     </section>
   )
 }

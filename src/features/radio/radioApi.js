@@ -10,10 +10,12 @@ export async function loadRadioCountries() {
   return data.filter((country) => country.stationcount > 0)
 }
 
-export async function searchRadioStations({ countryCode, query }) {
+export async function searchRadioStations({ countryCode, query, page = 1 }) {
   const params = {
-    limit: 48,
+    limit: 60,
+    offset: (page - 1) * 60,
     hidebroken: true,
+    lastcheckok: 1,
     order: 'clickcount',
     reverse: true,
   }
