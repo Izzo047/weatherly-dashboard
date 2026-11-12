@@ -8,6 +8,7 @@ import { aqiDetails, buildGardenAdvice, demoWeather, DEFAULT_CITY, pollenLevel, 
 import { loadWeather, searchCities } from '../features/weather/weatherApi'
 import GardenView from '../features/garden/GardenView'
 import WorldRadio from '../features/radio/WorldRadio'
+import SatelliteView from '../features/satellite/SatelliteView'
 
 function weatherIcon(type, size = 28) {
   if (type === 'rain') return <CloudRain size={size} strokeWidth={1.6} />
@@ -96,7 +97,7 @@ export default function App() {
   }
 
   return (
-    <main className="app-shell">
+    <main className={`app-shell ${activeView === 'garden' ? 'garden-mode' : ''}`}>
       <div className="grain" />
       <header className="topbar">
         <div className="brand" aria-label="Weatherly"><span className="brand-mark"><CloudSun size={21} /></span><span>weatherly</span></div>
@@ -104,6 +105,7 @@ export default function App() {
           <button className={activeView === 'weather' ? 'active' : ''} onClick={() => setActiveView('weather')} aria-current={activeView === 'weather' ? 'page' : undefined}><CloudSun size={16} />Weather</button>
           <button className={activeView === 'garden' ? 'active' : ''} onClick={() => setActiveView('garden')} aria-current={activeView === 'garden' ? 'page' : undefined}><Sprout size={16} />Garden</button>
           <button className={activeView === 'radio' ? 'active' : ''} onClick={() => setActiveView('radio')} aria-current={activeView === 'radio' ? 'page' : undefined}><Radio size={16} />World radio</button>
+          <button className={activeView === 'satellites' ? 'active' : ''} onClick={() => setActiveView('satellites')} aria-current={activeView === 'satellites' ? 'page' : undefined}><Globe2 size={16} />About</button>
         </nav>
         <div className="topbar-actions"><button className="icon-button" onClick={() => setIsDark((value) => !value)} aria-label="Toggle dark mode" title="Toggle dark mode">{isDark ? <Sun size={18} /> : <Moon size={18} />}</button></div>
       </header>
@@ -141,6 +143,7 @@ export default function App() {
       </>}
       {activeView === 'garden' && <GardenView weather={weather} />}
       {activeView === 'radio' && <WorldRadio />}
+      {activeView === 'satellites' && <SatelliteView />}
     </main>
   )
 }
