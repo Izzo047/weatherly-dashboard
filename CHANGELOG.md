@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.4.0 - 2026-11-12
+
+- Added the World Radio experience with worldwide Radio Browser station discovery, country filtering, verified streams, pagination, playback controls, presets, tuning controls, volume controls, signal status, and animated broadcast visuals.
+- Added a complete Garden mode with a Stardew Valley-inspired pixel-art interface, valley scene, farm sign, day label, toolbelt, seasonal panels, and responsive styling.
+- Added the About orbital observatory with a live CelesTrak satellite catalog, direct/proxy loading fallback, retry handling, category filters by usage, and support for active, communication, observation, navigation, science, and human-spaceflight missions.
+- Added an interactive Earth view with a realistic Blue Marble texture layer, drag rotation, zoom controls, live satellite positions, selected-object highlighting, orbital trails, and browser-side orbital propagation.
+- Added satellite detail views with NORAD identifiers, altitude, latitude, longitude, inclination, catalog epoch, mission structure illustration, and live position status.
+- Added responsive layouts and dark-mode styling for the new radio, garden, and satellite experiences.
+
 ## 0.3.0 - 2026-09-29
 
 - Added live city suggestions while typing, including region and country details from Open-Meteo geocoding.
